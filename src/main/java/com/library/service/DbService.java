@@ -2,10 +2,13 @@ package com.library.service;
 
 import com.library.dao.PieceDao;
 import com.library.dao.ReaderDao;
+import com.library.dao.RentalDao;
 import com.library.dao.TitleDao;
 import com.library.domain.Piece;
 import com.library.domain.Reader;
+import com.library.domain.Rental;
 import com.library.domain.Title;
+import com.library.domain.dto.RentalDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +25,9 @@ public class DbService {
 
     @Autowired
     private PieceDao pieceDao;
+
+    @Autowired
+    private RentalDao rentalDao;
 
     public Reader saveReader(Reader reader) {
         return readerDao.save(reader);
@@ -67,5 +73,14 @@ public class DbService {
                     .filter(piece -> piece.getStatus().equals("rental"))
                     .count();
         } else return new Long(9999);
+    }
+
+    public Integer rentBook(Rental rental) {
+        if(pieceDao.findByPieceId(rental.getPieceId()) != null && readerDao.findByReaderId(rental.getReaderId()) != null
+                && pieceDao.findByPieceId(rental.getPieceId()).getStatus().equals("rental")) {
+            rentalDao.save(rental);
+            return 0;
+
+        } else return 1;
     }
 }

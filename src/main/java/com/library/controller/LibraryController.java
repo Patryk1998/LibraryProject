@@ -4,6 +4,7 @@ import com.library.domain.Piece;
 import com.library.domain.Title;
 import com.library.domain.dto.PieceDto;
 import com.library.domain.dto.ReaderDto;
+import com.library.domain.dto.RentalDto;
 import com.library.domain.dto.TitleDto;
 import com.library.mapper.Mapper;
 import com.library.service.DbService;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,6 +67,11 @@ public class LibraryController {
     @RequestMapping(method = RequestMethod.GET, value = "getRentalPiecesOfTitle")
     public Long getRenalPiecesOfTitle(String title) {
         return dbService.rentalPiecesOfTitle(title);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "rentBook")
+    public Integer addRental(@RequestBody RentalDto rentalDto) {
+       return dbService.rentBook(mapper.mapRentalDtoToRental(rentalDto));
     }
 
 

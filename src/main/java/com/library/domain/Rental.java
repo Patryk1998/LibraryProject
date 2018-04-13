@@ -19,6 +19,9 @@ public class Rental {
     @Id
     @GeneratedValue
     @NotNull
+    @Column(name = "RENTAL_ID")
+    private int rentalId;
+
     @Column(name = "PIECE_ID")
     private int pieceId;
 
@@ -26,8 +29,14 @@ public class Rental {
     private int readerId;
 
     @Column(name = "RENT_DATE")
-    private Date rentDate;
+    private String rentDate;
 
     @Column(name = "RETURN_DATE")
-    private LocalDate returnDate;
+    private String returnDate;
+
+    public Rental(int pieceId, int readerId, String rentDate) {
+        this.pieceId = pieceId;
+        this.readerId = readerId;
+        this.rentDate = rentDate;
+    }
 }

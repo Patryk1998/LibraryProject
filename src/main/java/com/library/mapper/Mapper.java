@@ -2,9 +2,11 @@ package com.library.mapper;
 
 import com.library.domain.Piece;
 import com.library.domain.Reader;
+import com.library.domain.Rental;
 import com.library.domain.Title;
 import com.library.domain.dto.PieceDto;
 import com.library.domain.dto.ReaderDto;
+import com.library.domain.dto.RentalDto;
 import com.library.domain.dto.TitleDto;
 import org.springframework.stereotype.Component;
 
@@ -62,5 +64,10 @@ public class Mapper {
                 .map(piece -> new PieceDto(piece.getPieceId(), piece.getStatus(),
                         piece.getTitle()))
                 .collect(Collectors.toList());
+    }
+
+    public Rental mapRentalDtoToRental(RentalDto rentalDto) {
+        return new Rental(rentalDto.getRentalId(), rentalDto.getPieceId(), rentalDto.getReaderId(), rentalDto.getRentDate(),
+                rentalDto.getReturnDate());
     }
 }
