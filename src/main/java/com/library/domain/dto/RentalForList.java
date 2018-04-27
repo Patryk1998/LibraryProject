@@ -5,15 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Date;
 
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
-public class RentalDto {
+public class RentalForList {
     private int rentalId;
-    private int pieceId;
-    private int readerId;
-    private LocalDate rentDate = LocalDate.now();
+    private String nameOfBook;
+    private String readerSurname;
+    private LocalDate rentDate;
     private LocalDate returnDate;
 }

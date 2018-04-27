@@ -5,9 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
-import java.util.Date;
+import java.sql.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,7 +16,6 @@ public class Rental {
 
     @Id
     @GeneratedValue
-    @NotNull
     @Column(name = "RENTAL_ID")
     private int rentalId;
 
@@ -29,14 +26,12 @@ public class Rental {
     private int readerId;
 
     @Column(name = "RENT_DATE")
-    private String rentDate;
+    private Date rentDate;
 
     @Column(name = "RETURN_DATE")
-    private String returnDate;
+    private Date returnDate;
 
-    public Rental(int pieceId, int readerId, String rentDate) {
-        this.pieceId = pieceId;
-        this.readerId = readerId;
-        this.rentDate = rentDate;
+    public void setReturnDate(Date returnDate) {
+        this.returnDate = returnDate;
     }
 }

@@ -14,5 +14,4 @@ public interface TitleDao extends CrudRepository<Title, Integer> {
     List<Title> findAll();
 
     Title findByTitle(String title);
-
 }

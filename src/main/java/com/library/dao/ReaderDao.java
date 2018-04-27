@@ -1,6 +1,7 @@
 package com.library.dao;
 
 import com.library.domain.Reader;
+import com.library.domain.Title;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,4 +15,5 @@ public interface ReaderDao extends CrudRepository<Reader, Integer> {
     List<Reader> findAll();
 
     Reader findByReaderId(int id);
+
 }

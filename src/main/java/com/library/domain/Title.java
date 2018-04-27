@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +29,7 @@ public class Title {
     private String author;
 
     @Column(name = "SPEND_DATE")
-    private String spendDate;
+    private int spendYear;
 
     @OneToMany(
             targetEntity = Piece.class,
@@ -39,10 +38,4 @@ public class Title {
             fetch = FetchType.EAGER
     )
     private List<Piece> pieces = new ArrayList<>();
-
-    public Title(String title, String author, String spendDate) {
-        this.title = title;
-        this.author = author;
-        this.spendDate = spendDate;
-    }
 }

@@ -3,10 +3,13 @@ package com.library.domain;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.tomcat.jni.Local;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+
+import java.sql.Date;
+import java.time.LocalDate;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,5 +31,5 @@ public class Reader {
     private String surname;
 
     @Column(name = "REGISTRATION_DATE")
-    private String regDate;
+    private Date regDate;
 }

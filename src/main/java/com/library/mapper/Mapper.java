@@ -1,73 +1,83 @@
 package com.library.mapper;
 
+import com.library.dao.PieceDao;
+import com.library.dao.ReaderDao;
+import com.library.dao.TitleDao;
 import com.library.domain.Piece;
 import com.library.domain.Reader;
 import com.library.domain.Rental;
 import com.library.domain.Title;
-import com.library.domain.dto.PieceDto;
-import com.library.domain.dto.ReaderDto;
-import com.library.domain.dto.RentalDto;
-import com.library.domain.dto.TitleDto;
+import com.library.domain.dto.*;
+import com.library.service.DbService;
+import com.library.service.NotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.Period;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
 public class Mapper {
-    public ReaderDto mapReaderToReaderDto(Reader reader) {
-        return new ReaderDto(reader.getReaderId(), reader.getName(),
-                reader.getSurname(), reader.getRegDate());
-    }
+    @Autowired
+    private LocalDateMapper localDateMapper;
+
+    @Autowired
+    private DbService dbService;
+
 
     public Reader mapReaderDtoToReader(ReaderDto readerDto) {
         return new Reader(readerDto.getReaderId(), readerDto.getName(),
-                readerDto.getSurname(), readerDto.getRegDate());
+                readerDto.getSurname(), localDateMapper.convertToDatabaseColumn(readerDto.getRegDate()));
     }
 
-    public List<ReaderDto> mapToReaderDtoList(final List<Reader> list) {
+    public List<ReaderDto> mapReaderListToReaderDtoList(final List<Reader> list) {
         return list.stream()
                 .map(reader -> new ReaderDto(reader.getReaderId(), reader.getName(),
-                        reader.getSurname(), reader.getRegDate()))
+                        reader.getSurname(), localDateMapper.convertToEntityAttribute(reader.getRegDate())))
                 .collect(Collectors.toList());
 
-    }
-
-    public TitleDto mapTitleToTitleDto(Title title) {
-        return new TitleDto(title.getTitleId(), title.getTitle(),
-                title.getAuthor(), title.getSpendDate(), title.getPieces());
     }
 
     public Title mapTitleDtoToTitle(TitleDto titleDto) {
         return new Title(titleDto.getTitleId(), titleDto.getTitle(),
-                titleDto.getAuthor(), titleDto.getSpendDate(), titleDto.getPieces());
+                titleDto.getAuthor(), titleDto.getSpendYear(), titleDto.getPieces());
     }
 
-    public List<TitleDto> mapToTitleDtoList(List<Title> list) {
+    public List<TitleForList> mapTitleListToTitleForListList(List<Title> list) {
         return list.stream()
-                .map(title -> new TitleDto(title.getTitleId(), title.getTitle(),
-                        title.getAuthor(), title.getSpendDate(), title.getPieces()))
+                .map(title -> mapTitleToTitleForList(title))
                 .collect(Collectors.toList());
     }
 
-    public PieceDto mapPieceToPieceDto(Piece piece) {
-        return new PieceDto(piece.getPieceId(), piece.getStatus(), piece.getTitle());
+    public List<PieceForList> mapPiecesListToPieceForListList(List<Piece> pieces) {
+        return pieces.stream()
+                .map(piece -> mapPieceToPieceForList(piece))
+                .collect(Collectors.toList());
+    }
+
+    public PieceForList mapPieceToPieceForList(Piece piece) {
+        return new PieceForList(piece.getPieceId(), piece.getStatus());
+    }
+
+    public TitleForList mapTitleToTitleForList(Title title) {
+        return new TitleForList(title.getTitleId(), title.getTitle(),
+                title.getAuthor(), title.getSpendYear(), mapPiecesListToPieceForListList(title.getPieces()));
     }
 
     public Piece mapPieceDtoToPiece(PieceDto pieceDto) {
         return new Piece(pieceDto.getPieceId(), pieceDto.getStatus(), pieceDto.getTitle());
     }
 
-    public List<PieceDto> mapToPieceDtoList(List<Piece> list) {
-        return list.stream()
-                .map(piece -> new PieceDto(piece.getPieceId(), piece.getStatus(),
-                        piece.getTitle()))
-                .collect(Collectors.toList());
+    public Rental mapRentalDtoToRental(RentalDto rentalDto) {
+        return new Rental(rentalDto.getRentalId(), rentalDto.getPieceId(), rentalDto.getReaderId(), localDateMapper.convertToDatabaseColumn(rentalDto.getRentDate()),
+                null);
     }
 
-    public Rental mapRentalDtoToRental(RentalDto rentalDto) {
-        return new Rental(rentalDto.getRentalId(), rentalDto.getPieceId(), rentalDto.getReaderId(), rentalDto.getRentDate(),
-                rentalDto.getReturnDate());
+    public List<RentalForList> mapRentalListToRentalForListList(List<Rental> rentals) {
+        return rentals.stream()
+                .map(rental -> dbService.mapToRentalForList(rental))
+                .collect(Collectors.toList());
     }
 }
