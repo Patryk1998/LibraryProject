@@ -1,5 +1,7 @@
-package com.library;
+package com.library.h2Test;
 
+
+import com.library.LibraryApplication;
 import com.library.dao.PieceDao;
 import com.library.dao.ReaderDao;
 import com.library.dao.RentalDao;
@@ -12,26 +14,26 @@ import com.library.domain.dto.PieceDto;
 import com.library.domain.dto.ReaderDto;
 import com.library.domain.dto.RentalDto;
 import com.library.domain.dto.TitleDto;
+import com.library.h2Test.H2DataSourceForTests;
 import com.library.mapper.LocalDateMapper;
 import com.library.mapper.Mapper;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
-public class CrudTests {
+@SpringBootTest(classes = {
+        LibraryApplication.class,
+        H2DataSourceForTests.class})
+@ActiveProfiles("test")
+public class H2CrudTests {
 
     @Autowired
     private LocalDateMapper localDateMapper;
@@ -67,9 +69,6 @@ public class CrudTests {
         Assert.assertEquals("Name", reading.getName());
         Assert.assertEquals("Surname", reading.getSurname());
         Assert.assertEquals(reader.getRegDate(), localDateMapper.convertToDatabaseColumn(readerDto.getRegDate()));
-
-        //Clean Up
-        readerDao.delete(id);
     }
 
     @Test
@@ -88,9 +87,6 @@ public class CrudTests {
         Assert.assertEquals(title.getTitle(), reading.getTitle());
         Assert.assertEquals(title.getAuthor(), reading.getAuthor());
         Assert.assertEquals(title.getSpendYear(), reading.getSpendYear());
-
-        //Clean Up
-        titleDao.delete(id);
     }
 
     @Test
@@ -107,9 +103,6 @@ public class CrudTests {
         //Then
         Assert.assertEquals(piece.getPieceId(), reading.getPieceId());
         Assert.assertEquals(piece.getStatus(), reading.getStatus());
-
-        //Clean Up
-        pieceDao.delete(id);
     }
 
     @Test
@@ -130,10 +123,6 @@ public class CrudTests {
         Assert.assertEquals(rental.getReaderId(), reading.getReaderId());
         Assert.assertEquals(rental.getRentDate(), reading.getRentDate());
         Assert.assertEquals(rental.getReturnDate(), reading.getReturnDate());
-
-        //Clean Up
-        rentalDao.delete(id);
-
     }
 
     @Test
@@ -158,8 +147,5 @@ public class CrudTests {
         Assert.assertEquals(title.getPieces().get(0).getPieceId(), reading.getPieces().get(0).getPieceId());
         Assert.assertEquals(title.getPieces().get(0).getStatus(), reading.getPieces().get(0).getStatus());
         Assert.assertEquals(piece.getTitle().getTitleId(), reading.getTitleId());
-
-        //Clean Up
-        titleDao.delete(id);
     }
 }
