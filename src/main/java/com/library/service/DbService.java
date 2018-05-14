@@ -105,16 +105,11 @@ public class DbService {
     }
 
     public RentalForList mapToRentalForList(Rental rental) {
-        if (Optional.ofNullable(rental.getReturnDate()).isPresent()) {
+
             return new RentalForList(rental.getRentalId(), pieceDao.findByPieceId(rental.getPieceId()).getTitle().getTitle(),
                     readerDao.findByReaderId(rental.getReaderId()).getSurname(),
                     localDateMapper.convertToEntityAttribute(rental.getRentDate()),
                     localDateMapper.convertToEntityAttribute(rental.getReturnDate()));
-        } else {
-            return new RentalForList(rental.getRentalId(), pieceDao.findByPieceId(rental.getPieceId()).getTitle().getTitle(),
-                    readerDao.findByReaderId(rental.getReaderId()).getSurname(),
-                    localDateMapper.convertToEntityAttribute(rental.getRentDate()),
-                    null);
-        }
+
     }
 }

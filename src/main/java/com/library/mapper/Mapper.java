@@ -13,6 +13,7 @@ import com.library.service.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -72,7 +73,7 @@ public class Mapper {
 
     public Rental mapRentalDtoToRental(RentalDto rentalDto) {
         return new Rental(rentalDto.getRentalId(), rentalDto.getPieceId(), rentalDto.getReaderId(), localDateMapper.convertToDatabaseColumn(rentalDto.getRentDate()),
-                null);
+                Date.valueOf("1111-11-1"));
     }
 
     public List<RentalForList> mapRentalListToRentalForListList(List<Rental> rentals) {
